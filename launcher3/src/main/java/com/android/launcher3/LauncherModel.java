@@ -934,6 +934,7 @@ public class LauncherModel extends BroadcastReceiver
     }
 
     /**
+     * 查找需要展示的app和widget
      * Find a folder in the db, creating the FolderInfo if necessary, and adding it to folderList.
      */
     FolderInfo getFolderById(Context context, HashMap<Long,FolderInfo> folderList, long id) {
@@ -1381,9 +1382,9 @@ public class LauncherModel extends BroadcastReceiver
                 isLaunching = isLaunching || stopLoaderLocked();
                 mLoaderTask = new LoaderTask(mApp.getContext(), isLaunching, loadFlags);
                 if (synchronousBindPage != PagedView.INVALID_RESTORE_PAGE
-                        && mAllAppsLoaded && mWorkspaceLoaded) {
+                        && mAllAppsLoaded && mWorkspaceLoaded) {//只加载某个页面的cellLayout或者图标
                     mLoaderTask.runBindSynchronousPage(synchronousBindPage);
-                } else {
+                } else {//加载所有的图标 到缓存中
                     sWorkerThread.setPriority(Thread.NORM_PRIORITY);
                     sWorker.post(mLoaderTask);
                 }
@@ -1464,10 +1465,11 @@ public class LauncherModel extends BroadcastReceiver
     }
 
     /**
+     *
      * Runnable for the thread that loads the contents of the launcher:
      *   - workspace icons
      *   - widgets
-     *   - all apps icons
+     *   - all apps icons 所有的图标
      */
     private class LoaderTask implements Runnable {
         private Context mContext;
@@ -1555,6 +1557,7 @@ public class LauncherModel extends BroadcastReceiver
             }
         }
 
+        //加载某个页面的cellLayout 和该页面的图标
         void runBindSynchronousPage(int synchronousBindPage) {
             if (synchronousBindPage == PagedView.INVALID_RESTORE_PAGE) {
                 // Ensure that we have a valid page index to load synchronously
@@ -1589,6 +1592,20 @@ public class LauncherModel extends BroadcastReceiver
             // XXX: For now, continue posting the binding of AllApps as there are other issues that
             //      arise from that.
             onlyBindAllApps();
+        }
+
+        @Override
+        protected void finalize() throws Throwable {
+            super.finalize();
+        }
+
+        @Override
+        protected Object clone() throws CloneNotSupportedException {
+            return super.clone();
+        }
+
+        public LoaderTask() {
+            super();
         }
 
         public void run() {
@@ -2559,6 +2576,7 @@ public class LauncherModel extends BroadcastReceiver
             final boolean postOnMainThread = (deferredBindRunnables != null);
 
             // Bind the workspace items
+            //绑定workspace
             int N = workspaceItems.size();
             for (int i = 0; i < N; i += ITEMS_CHUNK) {
                 final int start = i;
@@ -2583,6 +2601,7 @@ public class LauncherModel extends BroadcastReceiver
             }
 
             // Bind the folders
+            //绑定folder
             if (!folders.isEmpty()) {
                 final Runnable r = new Runnable() {
                     public void run() {
@@ -2602,6 +2621,7 @@ public class LauncherModel extends BroadcastReceiver
             }
 
             // Bind the widgets, one at a time
+            //绑定widgets
             N = appWidgets.size();
             for (int i = 0; i < N; i++) {
                 final LauncherAppWidgetInfo widget = appWidgets.get(i);
@@ -2622,6 +2642,7 @@ public class LauncherModel extends BroadcastReceiver
         }
 
         /**
+         * 在主线程中绑定所有加载的数据到实际的视图中
          * Binds all loaded data to actual views on the main thread.
          */
         private void bindWorkspace(int synchronizeBindPage, final boolean isUpgradePath) {

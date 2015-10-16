@@ -48,6 +48,7 @@ class AllAppsList {
 
     private AppFilter mAppFilter;
 
+
     /**
      * Boring constructor.
      */

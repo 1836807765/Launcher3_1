@@ -47,6 +47,8 @@ class FolderKeyEventListener implements View.OnKeyListener {
 
 /**
  * A keyboard listener we set on all the hotseat buttons.
+ *
+ * 对于HotSeat区域的事件监听
  */
 class HotseatIconKeyEventListener implements View.OnKeyListener {
     public boolean onKey(View v, int keyCode, KeyEvent event) {

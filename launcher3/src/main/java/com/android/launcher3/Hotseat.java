@@ -146,6 +146,8 @@ public class Hotseat extends FrameLayout {
             Context context = getContext();
 
             LayoutInflater inflater = LayoutInflater.from(context);
+
+            //用于点击显示所有APP图标的allAppsButton按钮,是一个TextView
             TextView allAppsButton = (TextView)
                     inflater.inflate(R.layout.all_apps_button, mContent, false);
             Drawable d = context.getResources().getDrawable(R.drawable.all_apps_button_icon);
@@ -158,7 +160,7 @@ public class Hotseat extends FrameLayout {
             if (mLauncher != null) {
                 allAppsButton.setOnTouchListener(mLauncher.getHapticFeedbackTouchListener());
                 mLauncher.setAllAppsButton(allAppsButton);
-                allAppsButton.setOnClickListener(mLauncher);
+                allAppsButton.setOnClickListener(mLauncher);//appAppsButton的点击事件
                 allAppsButton.setOnFocusChangeListener(mLauncher.mFocusHandler);
             }
 
@@ -168,7 +170,8 @@ public class Hotseat extends FrameLayout {
             int y = getCellYFromOrder(mAllAppsButtonRank);
             CellLayout.LayoutParams lp = new CellLayout.LayoutParams(x,y,1,1);
             lp.canReorder = false;
-            mContent.addViewToCellLayout(allAppsButton, -1, allAppsButton.getId(), lp, true);
+            //隐藏allAppsButton控件
+//            mContent.addViewToCellLayout(allAppsButton, -1, allAppsButton.getId(), lp, true);
         }
     }
 

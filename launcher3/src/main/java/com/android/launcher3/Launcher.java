@@ -64,13 +64,16 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.os.PersistableBundle;
 import android.os.StrictMode;
 import android.os.SystemClock;
+import android.support.annotation.Nullable;
 import android.text.Selection;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.method.TextKeyListener;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.HapticFeedbackConstants;
@@ -136,6 +139,21 @@ public class Launcher extends Activity
     static final String TAG = "Launcher";
     static final boolean LOGD = false;
 
+    @Override
+    public void onPanelClosed(int featureId, Menu menu) {
+        super.onPanelClosed(featureId, menu);
+    }
+
+    @Override
+    public boolean onCreateThumbnail(Bitmap outBitmap, Canvas canvas) {
+        return super.onCreateThumbnail(outBitmap, canvas);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
+        super.onCreate(savedInstanceState, persistentState);
+    }
+
     static final boolean PROFILE_STARTUP = false;
     static final boolean DEBUG_WIDGETS = false;
     static final boolean DEBUG_STRICT_MODE = false;
@@ -176,7 +194,11 @@ public class Launcher extends Activity
     // Type: int
     private static final String RUNTIME_STATE_CURRENT_SCREEN = "launcher.current_screen";
     // Type: int
-    private static final String RUNTIME_STATE = "launcher.state";
+    @Nullable
+    @Override
+    public ActionMode onWindowStartingActionMode(ActionMode.Callback callback) {
+        return super.onWindowStartingActionMode(callback);
+    }private static final String RUNTIME_STATE = "launcher.state";
     // Type: int
     private static final String RUNTIME_STATE_PENDING_ADD_CONTAINER = "launcher.add_container";
     // Type: int
@@ -411,7 +433,7 @@ public class Launcher extends Activity
         mIsSafeModeEnabled = getPackageManager().isSafeMode();
         mModel = app.setLauncher(this);
         mIconCache = app.getIconCache();
-        mIconCache.flushInvalidIcons(grid);
+        mIconCache.flushInvalidIcons(grid);//清除掉部分尺寸不合适的图标
         mDragController = new DragController(this);
         mInflater = getLayoutInflater();
 
@@ -438,6 +460,7 @@ public class Launcher extends Activity
         setupViews();
         grid.layout(this);
 
+        //Registers various content observers  注册内容观察者
         registerContentObservers();
 
         lockAllApps();
@@ -449,6 +472,7 @@ public class Launcher extends Activity
             android.os.Debug.stopMethodTracing();
         }
 
+        //加载应用图标
         if (!mRestoring) {
             if (DISABLE_SYNCHRONOUS_BINDING_CURRENT_PAGE) {
                 // If the user leaves launcher, then we should just load items asynchronously when
@@ -465,6 +489,7 @@ public class Launcher extends Activity
         mDefaultKeySsb = new SpannableStringBuilder();
         Selection.setSelection(mDefaultKeySsb, 0);
 
+        //注册广播接收者
         IntentFilter filter = new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
         registerReceiver(mCloseSystemDialogsReceiver, filter);
 
@@ -1348,6 +1373,7 @@ public class Launcher extends Activity
 
     /**
      * Finds all the views we need and configure them properly.
+     * 填充所有需要的视图以及相关的配置.
      */
     private void setupViews() {
         final DragController dragController = mDragController;
@@ -1366,7 +1392,7 @@ public class Launcher extends Activity
         // Setup the drag layer
         mDragLayer.setup(this, dragController);
 
-        // Setup the hotseat
+        // Setup the hotseat 底部的横栏 指示条下方的控件 包含点击显示所有图标抽屉的按钮
         mHotseat = (Hotseat) findViewById(R.id.hotseat);
         if (mHotseat != null) {
             mHotseat.setup(this);
@@ -2515,7 +2541,7 @@ public class Launcher extends Activity
 
     /**
      * Launches the intent referred by the clicked shortcut.
-     *
+     *短点击时的intent
      * @param v The view representing the clicked shortcut.
      */
     public void onClick(View v) {
@@ -2611,14 +2637,14 @@ public class Launcher extends Activity
     /**
      * Event handler for the "grid" button that appears on the home screen, which
      * enters all apps mode.
-     *
+     * 点击底部Hotseat部分显示所有app应用程序的allAppsButton按钮时,会执行的方法
      * @param v The view that was clicked.
      */
     protected void onClickAllAppsButton(View v) {
         if (LOGD) Log.d(TAG, "onClickAllAppsButton");
         if (isAllAppsVisible()) {
             showWorkspace(true);
-        } else {
+        } else {//展示所有的app的图标
             showAllApps(true, AppsCustomizePagedView.ContentType.Applications, false);
         }
         if (mLauncherCallbacks != null) {
@@ -3520,7 +3546,7 @@ public class Launcher extends Activity
                 }
             };
             toView.bringToFront();
-            toView.setVisibility(View.VISIBLE);
+            toView.setVisibility(View.VISIBLE);//toView为展示所有app图标的视图
             toView.post(startAnimRunnable);
         } else {
             toView.setTranslationX(0.0f);
@@ -3872,6 +3898,7 @@ public class Launcher extends Activity
     public void onWorkspaceShown(boolean animated) {
     }
 
+    //显示所有的app图标
     void showAllApps(boolean animated, AppsCustomizePagedView.ContentType contentType,
                      boolean resetPageToZero) {
         if (mState != State.WORKSPACE) return;
@@ -4485,7 +4512,7 @@ public class Launcher extends Activity
 
     /**
      * Callback saying that there aren't any more items to bind.
-     *
+     * 完成所有的Items的绑定
      * Implementation of the method from LauncherModel.Callbacks.
      */
     public void finishBindingItems(final boolean upgradePath) {
