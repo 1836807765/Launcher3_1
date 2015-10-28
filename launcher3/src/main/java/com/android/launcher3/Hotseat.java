@@ -170,8 +170,7 @@ public class Hotseat extends FrameLayout {
             int y = getCellYFromOrder(mAllAppsButtonRank);
             CellLayout.LayoutParams lp = new CellLayout.LayoutParams(x,y,1,1);
             lp.canReorder = false;
-            //隐藏allAppsButton控件
-//            mContent.addViewToCellLayout(allAppsButton, -1, allAppsButton.getId(), lp, true);
+            mContent.addViewToCellLayout(allAppsButton, -1, allAppsButton.getId(), lp, true);
         }
     }
 

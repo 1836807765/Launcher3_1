@@ -2710,6 +2710,7 @@ public class Workspace extends SmoothPagedView
         }
 
         mDragInfo = cellInfo;
+        //使图标消失，有一种被“拖到”空中背景
         child.setVisibility(INVISIBLE);
         CellLayout layout = (CellLayout) child.getParent().getParent();
         layout.prepareChildForDrag(child);
@@ -4447,7 +4448,8 @@ public class Workspace extends SmoothPagedView
 
     @Override
     public boolean supportsAppInfoDropTarget() {
-        return false;
+//        return false;
+        return true;
     }
 
     @Override

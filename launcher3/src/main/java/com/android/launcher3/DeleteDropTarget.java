@@ -95,9 +95,13 @@ public class DeleteDropTarget extends ButtonDropTarget {
         }
     }
 
+    //
     private boolean isAllAppsApplication(DragSource source, Object info) {
+//        return true;
         return source.supportsAppInfoDropTarget() && (info instanceof AppInfo);
     }
+
+
     private boolean isAllAppsWidget(DragSource source, Object info) {
         if (source instanceof AppsCustomizePagedView) {
             if (info instanceof PendingAddItemInfo) {
@@ -175,11 +179,18 @@ public class DeleteDropTarget extends ButtonDropTarget {
         return false;
     }
 
+    //开始拖拽
     @Override
     public void onDragStart(DragSource source, Object info, int dragAction) {
         boolean isVisible = true;
-        boolean useUninstallLabel = !LauncherAppState.isDisableAllApps() &&
+        //卸载标签
+//        boolean useUninstallLabel = !LauncherAppState.isDisableAllApps() &&
+//                isAllAppsApplication(source, info);
+        // true && true = true  true && false = false
+        boolean useUninstallLabel = LauncherAppState.isDisableAllApps() &&
                 isAllAppsApplication(source, info);
+
+        //删除标签 false && * = false
         boolean useDeleteLabel = !useUninstallLabel && source.supportsDeleteDropTarget();
 
         // If we are dragging an application from AppsCustomize, only show the control if we can
@@ -188,7 +199,9 @@ public class DeleteDropTarget extends ButtonDropTarget {
         if (!willAcceptDrop(info) || isAllAppsWidget(source, info)) {
             isVisible = false;
         }
+
         if (useUninstallLabel) {
+            //4.3版本
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
                 UserManager userManager = (UserManager)
                         getContext().getSystemService(Context.USER_SERVICE);
@@ -282,6 +295,7 @@ public class DeleteDropTarget extends ButtonDropTarget {
     }
 
     private boolean isUninstallFromWorkspace(DragObject d) {
+        //
         if (LauncherAppState.isDisableAllApps() && isWorkspaceOrFolderApplication(d)) {
             ShortcutInfo shortcut = (ShortcutInfo) d.dragInfo;
             // Only allow manifest shortcuts to initiate an un-install.
@@ -290,6 +304,10 @@ public class DeleteDropTarget extends ButtonDropTarget {
         return false;
     }
 
+    /**
+     * 完成拖拽
+     * @param d
+     */
     private void completeDrop(DragObject d) {
         ItemInfo item = (ItemInfo) d.dragInfo;
         boolean wasWaitingForUninstall = mWaitingForUninstall;

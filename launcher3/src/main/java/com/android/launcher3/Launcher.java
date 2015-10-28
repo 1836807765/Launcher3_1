@@ -238,6 +238,7 @@ public class Launcher extends Activity
     public static final String USER_HAS_MIGRATED = "launcher.user_migrated_from_old_data";
 
     /** The different states that Launcher can be in. */
+    //None, WorkSpace, App_customize, Apps_customize_spring_loaded
     private enum State { NONE, WORKSPACE, APPS_CUSTOMIZE, APPS_CUSTOMIZE_SPRING_LOADED };
     private State mState = State.WORKSPACE;
     private AnimatorSet mStateAnimation;
@@ -474,6 +475,7 @@ public class Launcher extends Activity
 
         //加载应用图标
         if (!mRestoring) {
+            //disable_synchronous_binding_current_page
             if (DISABLE_SYNCHRONOUS_BINDING_CURRENT_PAGE) {
                 // If the user leaves launcher, then we should just load items asynchronously when
                 // they return.
@@ -489,7 +491,7 @@ public class Launcher extends Activity
         mDefaultKeySsb = new SpannableStringBuilder();
         Selection.setSelection(mDefaultKeySsb, 0);
 
-        //注册广播接收者
+        //注册广播接收者  监听Home按键消息
         IntentFilter filter = new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
         registerReceiver(mCloseSystemDialogsReceiver, filter);
 
@@ -507,6 +509,7 @@ public class Launcher extends Activity
             }
         }
 
+        //初次使用Launcher桌面，会出现向导提示控件
         if (shouldShowIntroScreen()) {
             showIntroScreen();
         } else {
@@ -987,13 +990,18 @@ public class Launcher extends Activity
     @Override
     protected void onStart() {
         super.onStart();
+
         FirstFrameAnimatorHelper.setIsVisible(true);
 
+        //LauncherCallbacks 启动器回调接口
         if (mLauncherCallbacks != null) {
             mLauncherCallbacks.onStart();
         }
     }
 
+    /**
+     * onResume方法 用户开始可以看到屏幕效果了
+     */
     @Override
     protected void onResume() {
         long startTime = 0;
@@ -1008,7 +1016,7 @@ public class Launcher extends Activity
 
         super.onResume();
 
-        // Restore the previous launcher state
+        // Restore the previous launcher state 重置launcher state
         if (mOnResumeState == State.WORKSPACE) {
             showWorkspace(false);
         } else if (mOnResumeState == State.APPS_CUSTOMIZE) {
@@ -3168,11 +3176,13 @@ public class Launcher extends Activity
         getDragLayer().sendAccessibilityEvent(AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED);
     }
 
+    //处理长按屏幕事件
     public boolean onLongClick(View v) {
         if (!isDraggingEnabled()) return false;
         if (isWorkspaceLocked()) return false;
         if (mState != State.WORKSPACE) return false;
 
+        //workspace
         if (v instanceof Workspace) {
             if (!mWorkspace.isInOverviewMode()) {
                 if (mWorkspace.enterOverviewMode()) {
@@ -3189,6 +3199,7 @@ public class Launcher extends Activity
 
         CellLayout.CellInfo longClickCellInfo = null;
         View itemUnderLongClick = null;
+        //Item : Application,ShortCut,Folder or AppWidget
         if (v.getTag() instanceof ItemInfo) {
             ItemInfo info = (ItemInfo) v.getTag();
             longClickCellInfo = new CellLayout.CellInfo(v, info);;
@@ -3199,8 +3210,10 @@ public class Launcher extends Activity
         // The hotseat touch handling does not go through Workspace, and we always allow long press
         // on hotseat items.
         final boolean inHotseat = isHotseatLayout(v);
+
         boolean allowLongPress = inHotseat || mWorkspace.allowLongPress();
         if (allowLongPress && !mDragController.isDragging()) {
+            //长按的控件为空
             if (itemUnderLongClick == null) {
                 // User long pressed on empty space
                 mWorkspace.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS,
@@ -3210,12 +3223,13 @@ public class Launcher extends Activity
                 } else {
                     mWorkspace.enterOverviewMode();
                 }
-            } else {
+            } else {//长按的控件不为空
                 final boolean isAllAppsButton = inHotseat && isAllAppsButtonRank(
                         mHotseat.getOrderInHotseat(
                                 longClickCellInfo.cellX,
                                 longClickCellInfo.cellY));
                 if (!(itemUnderLongClick instanceof Folder || isAllAppsButton)) {
+                    //除Folder和allAppsButton之外，其他能 移动
                     // User long pressed on an item
                     mWorkspace.startDrag(longClickCellInfo);
                 }
