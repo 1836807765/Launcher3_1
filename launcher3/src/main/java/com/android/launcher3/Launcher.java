@@ -3229,7 +3229,7 @@ public class Launcher extends Activity
                                 longClickCellInfo.cellX,
                                 longClickCellInfo.cellY));
                 if (!(itemUnderLongClick instanceof Folder || isAllAppsButton)) {
-                    //除Folder和allAppsButton之外，其他能 移动
+                    //除Folder和allAppsButton之外
                     // User long pressed on an item
                     mWorkspace.startDrag(longClickCellInfo);
                 }

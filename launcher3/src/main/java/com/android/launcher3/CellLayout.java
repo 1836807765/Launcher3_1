@@ -198,6 +198,8 @@ public class CellLayout extends ViewGroup {
         mMaxGap = Integer.MAX_VALUE;
         mCountX = (int) grid.numColumns;
         mCountY = (int) grid.numRows;
+//        mCountX = 5;
+//        mCountY = 5;
         mOccupied = new boolean[mCountX][mCountY];
         mTmpOccupied = new boolean[mCountX][mCountY];
         mPreviousReorderDirection[0] = INVALID_DIRECTION;
@@ -303,6 +305,7 @@ public class CellLayout extends ViewGroup {
     }
 
     public float getChildrenScale() {
+        //if the child is hotseat,then we need to scale the view ;otherwise do nothing
         return mIsHotseat ? mHotseatScale : 1.0f;
     }
 
@@ -591,6 +594,7 @@ public class CellLayout extends ViewGroup {
         mShortcutsAndWidgets.setIsHotseat(isHotseat);
     }
 
+    //add the view to cellLayout
     public boolean addViewToCellLayout(View child, int index, int childId, LayoutParams params,
             boolean markCells) {
         final LayoutParams lp = params;
@@ -601,6 +605,7 @@ public class CellLayout extends ViewGroup {
             bubbleChild.setTextVisibility(!mIsHotseat);
         }
 
+        //设置 图标的 缩放比例 如果使hotseat，需要进行缩放计算
         child.setScaleX(getChildrenScale());
         child.setScaleY(getChildrenScale());
 

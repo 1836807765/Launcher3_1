@@ -166,6 +166,7 @@ public class Workspace extends SmoothPagedView
 
     /**
      * The CellLayout that is currently being dragged over
+     *
      */
     private CellLayout mDragTargetLayout = null;
     /**

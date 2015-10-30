@@ -35,7 +35,7 @@ import java.util.ArrayList;
 public class Hotseat extends FrameLayout {
     private static final String TAG = "Hotseat";
 
-    private CellLayout mContent;
+    private CellLayout mContent;//the CellLayout of hotseat
 
     private Launcher mLauncher;
 
@@ -131,7 +131,9 @@ public class Hotseat extends FrameLayout {
         if (grid.isLandscape && !grid.isLargeTablet()) {
             mContent.setGridSize(1, (int) grid.numHotseatIcons);
         } else {
-            mContent.setGridSize((int) grid.numHotseatIcons, 1);
+            //set the size of cellLayout in HotSeat, x,y meaning the countX, countY
+//            mContent.setGridSize((int) grid.numHotseatIcons, 1);
+            mContent.setGridSize(4, 1);
         }
         mContent.setIsHotseat(true);
 
