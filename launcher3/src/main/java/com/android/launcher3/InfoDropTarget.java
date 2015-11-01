@@ -23,6 +23,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.drawable.TransitionDrawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -83,6 +84,8 @@ public class InfoDropTarget extends ButtonDropTarget {
             componentName = ((ShortcutInfo) d.dragInfo).intent.getComponent();
         } else if (d.dragInfo instanceof PendingAddItemInfo) {
             componentName = ((PendingAddItemInfo) d.dragInfo).componentName;
+        } else if (d.dragInfo instanceof LauncherAppWidgetInfo){
+            componentName = ((LauncherAppWidgetInfo) d.dragInfo).providerName;
         }
         final UserHandleCompat user;
         if (d.dragInfo instanceof ItemInfo) {
@@ -92,7 +95,11 @@ public class InfoDropTarget extends ButtonDropTarget {
         }
 
         if (componentName != null) {
+            //进入应用程序信息页面的动作
+//            Log.i("Demo", componentName.getClassName());
             mLauncher.startApplicationDetailsActivity(componentName, user);
+            //将info置为可见即可
+            d.cancelled = true;
         }
 
         // There is no post-drop animation, so clean up the DragView now
@@ -103,6 +110,13 @@ public class InfoDropTarget extends ButtonDropTarget {
     @Override
     public void onDragStart(DragSource source, Object info, int dragAction) {
         boolean isVisible = true;
+
+        /**
+         * info 有三种类型，分别为：appwidget，第三方应用，系统应用
+         * 第三方应用和系统应用都是shortcut
+         * 所以最终是appwidget和shortcut两种类型
+         */
+
 
         // Hide this button unless we are dragging something from AllApps
         if (!source.supportsAppInfoDropTarget()) {

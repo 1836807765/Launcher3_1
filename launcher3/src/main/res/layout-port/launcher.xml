@@ -66,6 +66,7 @@
             android:id="@+id/search_drop_target_bar"
             layout="@layout/search_drop_target_bar" />
 
+        <!--添加系统组件的控件布局-->
         <include layout="@layout/apps_customize_pane"
             android:id="@+id/apps_customize_pane"
             android:layout_width="match_parent"

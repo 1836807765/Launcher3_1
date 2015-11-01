@@ -67,6 +67,7 @@ public class AppsCustomizeTabHost extends FrameLayout implements LauncherTransit
 
     /**
      * Setup the tab host and create all necessary tabs.
+     * 填充需要展示的子控件的tabs
      */
     @Override
     protected void onFinishInflate() {

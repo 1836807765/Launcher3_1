@@ -132,8 +132,8 @@ public class Hotseat extends FrameLayout {
             mContent.setGridSize(1, (int) grid.numHotseatIcons);
         } else {
             //set the size of cellLayout in HotSeat, x,y meaning the countX, countY
-//            mContent.setGridSize((int) grid.numHotseatIcons, 1);
-            mContent.setGridSize(4, 1);
+            mContent.setGridSize((int) grid.numHotseatIcons, 1);
+//            mContent.setGridSize(4, 1);
         }
         mContent.setIsHotseat(true);
 

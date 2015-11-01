@@ -32,6 +32,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.UserManager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
@@ -107,7 +108,7 @@ public class DeleteDropTarget extends ButtonDropTarget {
             if (info instanceof PendingAddItemInfo) {
                 PendingAddItemInfo addInfo = (PendingAddItemInfo) info;
                 switch (addInfo.itemType) {
-                    case LauncherSettings.Favorites.ITEM_TYPE_SHORTCUT:
+//                    case LauncherSettings.Favorites.ITEM_TYPE_SHORTCUT:
                     case LauncherSettings.Favorites.ITEM_TYPE_APPWIDGET:
                         return true;
                 }
@@ -183,21 +184,40 @@ public class DeleteDropTarget extends ButtonDropTarget {
     @Override
     public void onDragStart(DragSource source, Object info, int dragAction) {
         boolean isVisible = true;
+        boolean tmp = false;
+        boolean useUninstallLabel = true;
+        if(info instanceof LauncherAppWidgetInfo){
+            tmp = true;
+        }
+
+        if(!tmp && info instanceof ShortcutInfo){
+            ShortcutInfo itemInfo = (ShortcutInfo)info;
+            // If jdge is true, info is system app.
+            if((itemInfo.flags & 1) != 1){
+                useUninstallLabel = false;
+            }
+        }
         //卸载标签
 //        boolean useUninstallLabel = !LauncherAppState.isDisableAllApps() &&
 //                isAllAppsApplication(source, info);
         // true && true = true  true && false = false
-        boolean useUninstallLabel = LauncherAppState.isDisableAllApps() &&
-                isAllAppsApplication(source, info);
+//        boolean useUninstallLabel = LauncherAppState.isDisableAllApps() &&
+//                isAllAppsApplication(source, info);
+//        boolean useUninstallLabel = LauncherAppState.isDisableAllApps() &&
+//                isAllAppsApplication(source, info);
 
+        if(tmp){
+            useUninstallLabel = false;
+        }
         //删除标签 false && * = false
-        boolean useDeleteLabel = !useUninstallLabel && source.supportsDeleteDropTarget();
-
+//        boolean useDeleteLabel = !useUninstallLabel && source.supportsDeleteDropTarget();
+        boolean useDeleteLabel = tmp;
+//        boolean useDeleteLabel = tmp;
         // If we are dragging an application from AppsCustomize, only show the control if we can
         // delete the app (it was downloaded), and rename the string to "uninstall" in such a case.
         // Hide the delete target if it is a widget from AppsCustomize.
         if (!willAcceptDrop(info) || isAllAppsWidget(source, info)) {
-            isVisible = false;
+            isVisible = true;
         }
 
         if (useUninstallLabel) {
@@ -299,7 +319,7 @@ public class DeleteDropTarget extends ButtonDropTarget {
         if (LauncherAppState.isDisableAllApps() && isWorkspaceOrFolderApplication(d)) {
             ShortcutInfo shortcut = (ShortcutInfo) d.dragInfo;
             // Only allow manifest shortcuts to initiate an un-install.
-            return !InstallShortcutReceiver.isValidShortcutLaunchIntent(shortcut.intent);
+            return InstallShortcutReceiver.isValidShortcutLaunchIntent(shortcut.intent);
         }
         return false;
     }

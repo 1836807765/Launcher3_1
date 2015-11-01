@@ -1407,7 +1407,9 @@ public class Launcher extends Activity
             mHotseat.setOnLongClickListener(this);
         }
 
+        //长按屏幕底部出现的壁纸和小组件等控件布局
         mOverviewPanel = (ViewGroup) findViewById(R.id.overview_panel);
+        //组件View
         View widgetButton = findViewById(R.id.widget_button);
         widgetButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -2818,12 +2820,15 @@ public class Launcher extends Activity
     /**
      * Event handler for the (Add) Widgets button that appears after a long press
      * on the home screen.
+     * 点击组件按钮之后弹出的界面
      */
     protected void onClickAddWidgetButton(View view) {
         if (LOGD) Log.d(TAG, "onClickAddWidgetButton");
+//        Log.i("Demo", "onClickAddWidgetButton");
         if (mIsSafeModeEnabled) {
             Toast.makeText(this, R.string.safemode_widget_error, Toast.LENGTH_SHORT).show();
         } else {
+            //弹出添加小部件的界面
             showAllApps(true, AppsCustomizePagedView.ContentType.Widgets, true);
             if (mLauncherCallbacks != null) {
                 mLauncherCallbacks.onClickAddWidgetButton(view);
@@ -2919,6 +2924,11 @@ public class Launcher extends Activity
         }
     }
 
+    /**
+     * 查看应用程序详细信息方法
+     * @param componentName
+     * @param user
+     */
     void startApplicationDetailsActivity(ComponentName componentName, UserHandleCompat user) {
         try {
             LauncherAppsCompat launcherApps = LauncherAppsCompat.getInstance(this);
@@ -3381,18 +3391,21 @@ public class Launcher extends Activity
 
         final ArrayList<View> layerViews = new ArrayList<View>();
 
-        Workspace.State workspaceState = contentType == AppsCustomizePagedView.ContentType.Widgets ?
-                Workspace.State.OVERVIEW_HIDDEN : Workspace.State.NORMAL_HIDDEN;
+//        Workspace.State workspaceState = contentType == AppsCustomizePagedView.ContentType.Widgets ?
+//                Workspace.State.OVERVIEW_HIDDEN : Workspace.State.NORMAL_HIDDEN;
+        Workspace.State workspaceState = Workspace.State.OVERVIEW_HIDDEN;
+
         Animator workspaceAnim =
                 mWorkspace.getChangeStateAnimation(workspaceState, animated, layerViews);
         if (!LauncherAppState.isDisableAllApps()
                 || contentType == AppsCustomizePagedView.ContentType.Widgets) {
             // Set the content type for the all apps/widgets space
+            //设置customizeTabHost中的展示类型为Widgets
             mAppsCustomizeTabHost.setContentTypeImmediate(contentType);
         }
 
         // If for some reason our views aren't initialized, don't animate
-        boolean initialized = getAllAppsButton() != null;
+        boolean initialized = getAllAppsButton() != null;//false
 
         if (animated && initialized) {
             mStateAnimation = LauncherAnimUtils.createAnimatorSet();
@@ -3565,8 +3578,8 @@ public class Launcher extends Activity
         } else {
             toView.setTranslationX(0.0f);
             toView.setTranslationY(0.0f);
-            toView.setScaleX(1.0f);
-            toView.setScaleY(1.0f);
+            toView.setScaleX(1.0f);//x轴上缩放1.0f
+            toView.setScaleY(1.0f);//y轴上缩放1.0f
             toView.setVisibility(View.VISIBLE);
             toView.bringToFront();
 
@@ -3912,7 +3925,7 @@ public class Launcher extends Activity
     public void onWorkspaceShown(boolean animated) {
     }
 
-    //显示所有的app图标
+
     void showAllApps(boolean animated, AppsCustomizePagedView.ContentType contentType,
                      boolean resetPageToZero) {
         if (mState != State.WORKSPACE) return;
