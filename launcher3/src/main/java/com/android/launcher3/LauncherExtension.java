@@ -228,7 +228,7 @@ public class LauncherExtension extends Launcher {
 
         @Override
         public boolean hasSettings() {
-            return false;
+            return true;
         }
 
         @Override

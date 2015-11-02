@@ -1217,13 +1217,17 @@ public class Launcher extends Activity
         }
     }
 
+    /**
+     * 设置显示Settings按钮
+     * @return
+     */
     protected boolean hasSettings() {
-        if (mLauncherCallbacks != null) {
-            return mLauncherCallbacks.hasSettings();
-        }
-        return false;
+//        if (mLauncherCallbacks != null) {
+//            return mLauncherCallbacks.hasSettings();
+//        }
+//        return false;
+        return true;
     }
-
 
     public void addToCustomContentPage(View customContent,
             CustomContentCallbacks callbacks, String description) {
