@@ -3230,7 +3230,7 @@ public class Launcher extends Activity
                         HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
                 if (mWorkspace.isInOverviewMode()) {
                     mWorkspace.startReordering(v);
-                } else {
+                } else {//进入浏览模式，可以看到全部的
                     mWorkspace.enterOverviewMode();
                 }
             } else {//长按的控件不为空
@@ -4410,6 +4410,7 @@ public class Launcher extends Activity
      * Add the views for a widget to the workspace.
      *
      * Implementation of the method from LauncherModel.Callbacks.
+     *
      */
     public void bindAppWidget(final LauncherAppWidgetInfo item) {
         Runnable r = new Runnable() {

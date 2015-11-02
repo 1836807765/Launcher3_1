@@ -147,7 +147,7 @@ public class AppsCustomizeTabHost extends FrameLayout implements LauncherTransit
         mPagedView.onLauncherTransitionPrepare(l, animated, toWorkspace);
         mInTransition = true;
 
-        if (toWorkspace) {
+        if (toWorkspace) {//from all apps --> workspace
             // Going from All Apps -> Workspace
             setVisibilityOfSiblingsWithLowerZOrder(VISIBLE);
         } else {

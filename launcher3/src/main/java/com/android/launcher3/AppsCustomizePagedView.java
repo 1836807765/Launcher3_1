@@ -718,6 +718,7 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
      * Clean up after dragging.
      *
      * @param target where the item was dragged to (can be null if the item was flung)
+     * 传入的参数：target ， false，success
      */
     private void endDragging(View target, boolean isFlingToDelete, boolean success) {
         if (isFlingToDelete || !success || (target != mLauncher.getWorkspace() &&
@@ -730,6 +731,8 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
         } else {
             mLauncher.unlockScreenOrientation(false);
         }
+        //拖拽结束 退出浏览模式
+        mLauncher.getWorkspace().exitOverviewMode(true);
     }
 
     @Override
@@ -770,6 +773,7 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
         mForceDrawAllChildrenNextFrame = !toWorkspace;
     }
 
+    //添加系统组件拖拽完成
     @Override
     public void onDropCompleted(View target, DragObject d, boolean isFlingToDelete,
             boolean success) {
@@ -799,6 +803,7 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
 
             d.deferDragViewCleanupPostAnimation = false;
         }
+
         cleanupWidgetPreloading(success);
         mDraggingWidget = false;
     }
