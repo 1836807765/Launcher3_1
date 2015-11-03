@@ -897,9 +897,12 @@ public class Launcher extends Activity
             mWorkspace.removeExtraEmptyScreenDelayed(true, exitSpringLoaded,
                     ON_ACTIVITY_RESULT_ANIMATION_DELAY, false);
         }
+        Log.i("Demo", "onActivityResult");
         mDragLayer.clearAnimatedView();
 
     }
+
+
 
     @Override
     protected void onActivityResult(
@@ -2514,6 +2517,7 @@ public class Launcher extends Activity
         return super.dispatchKeyEvent(event);
     }
 
+    //按下返回键执行的方法
     @Override
     public void onBackPressed() {
         if (mLauncherCallbacks != null && mLauncherCallbacks.handleBackPressed()) {
@@ -2858,9 +2862,14 @@ public class Launcher extends Activity
     /**
      * Event handler for a click on the settings button that appears after a long press
      * on the home screen.
+     * the user click the settings button
      */
     protected void onClickSettingsButton(View v) {
         if (LOGD) Log.d(TAG, "onClickSettingsButton");
+
+        //add the set the Intent to the settings activity;
+//        final Intent settings = new Intent()
+
         if (mLauncherCallbacks != null) {
             mLauncherCallbacks.onClickSettingsButton(v);
         }

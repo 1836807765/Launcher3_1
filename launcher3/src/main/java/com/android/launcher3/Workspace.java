@@ -64,6 +64,7 @@ import android.view.accessibility.AccessibilityManager;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.launcher3.FolderIcon.FolderRingAnimator;
 import com.android.launcher3.Launcher.CustomContentCallbacks;
@@ -429,12 +430,15 @@ public class Workspace extends SmoothPagedView
         mDeferRemoveExtraEmptyScreen = true;
     }
 
+
     public void onDragEnd() {
         if (!mDeferRemoveExtraEmptyScreen) {
+            //TODO neet to see.
             removeExtraEmptyScreen(true, mDragSourceInternal != null);
         }
 
         mIsDragOccuring = false;
+
         updateChildrenLayersEnabled(false);
         mLauncher.unlockScreenOrientation(false);
 
@@ -444,6 +448,7 @@ public class Workspace extends SmoothPagedView
 
         mDragSourceInternal = null;
         mLauncher.onInteractionEnd();
+        Log.i("Demo", " the mlauncher's mode is : " + mLauncher.getWorkspace().isInOverviewMode());
     }
 
     /**
@@ -1899,15 +1904,25 @@ public class Workspace extends SmoothPagedView
         }
     }
 
+    /**
+     * updateChildrenLayersEnabled
+     * @param force 是否强制
+     */
     private void updateChildrenLayersEnabled(boolean force) {
+//        Log.i("Demo", "the workspace's state is overview ? the result is : " + (mState == State.OVERVIEW));
+//        Log.i("Demo", " the state isSwitchingState : " + mIsSwitchingState);
         boolean small = mState == State.OVERVIEW || mIsSwitchingState;
+
+        //false                        //false
         boolean enableChildrenLayers = force || small || mAnimatingViewIntoPlace || isPageMoving();
 
         if (enableChildrenLayers != mChildrenLayersEnabled) {
             mChildrenLayersEnabled = enableChildrenLayers;
             if (mChildrenLayersEnabled) {
+                Log.i("Demo", " mChildrenLayersEnabled value is true ");
                 enableHwLayersOnVisiblePages();
             } else {
+                Log.i("Demo", "pageCount is : " + getPageCount());
                 for (int i = 0; i < getPageCount(); i++) {
                     final CellLayout cl = (CellLayout) getChildAt(i);
                     cl.enableHardwareLayer(false);
@@ -4230,6 +4245,7 @@ public class Workspace extends SmoothPagedView
      */
     public void onDropCompleted(final View target, final DragObject d,
             final boolean isFlingToDelete, final boolean success) {
+
         if (mDeferDropAfterUninstall) {
             mDeferredAction = new Runnable() {
                 public void run() {

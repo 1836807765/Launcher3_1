@@ -719,7 +719,8 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
      *
      * @param target where the item was dragged to (can be null if the item was flung)
      * 传入的参数：target ， false，success
-     */
+     *
+     **/
     private void endDragging(View target, boolean isFlingToDelete, boolean success) {
         if (isFlingToDelete || !success || (target != mLauncher.getWorkspace() &&
                 !(target instanceof DeleteDropTarget) && !(target instanceof Folder))) {
@@ -732,7 +733,10 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
             mLauncher.unlockScreenOrientation(false);
         }
         //拖拽结束 退出浏览模式
-        mLauncher.getWorkspace().exitOverviewMode(true);
+        Toast.makeText(getContext(), mLauncher.getWorkspace().isInOverviewMode()+"", Toast.LENGTH_SHORT).show();
+        if(mLauncher.getWorkspace().isInOverviewMode()){
+            mLauncher.getWorkspace().exitOverviewMode(true);
+        }
     }
 
     @Override
@@ -1420,6 +1424,7 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
     }
 
     public void setApps(ArrayList<AppInfo> list) {
+
         if (!LauncherAppState.isDisableAllApps()) {
             mApps = list;
             Collections.sort(mApps, LauncherModel.getAppNameComparator());

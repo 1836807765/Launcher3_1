@@ -375,7 +375,7 @@ public class DragController {
      */
     void onDeferredEndDrag(DragView dragView) {
         dragView.remove();
-
+        Log.i("Demo", "onDeferredEndDrag");
         if (mDragObject.deferDragViewCleanupPostAnimation) {
             // If we skipped calling onDragEnd() before, do it now
             for (DragListener listener : mListeners) {
@@ -439,6 +439,7 @@ public class DragController {
                 mLastDropTarget = null;
                 break;
             case MotionEvent.ACTION_UP:
+                Log.i("Demo", "Action up");
                 mLastTouchUpTime = System.currentTimeMillis();
                 if (mDragging) {
                     PointF vec = isFlingingToDelete(mDragObject.dragSource);

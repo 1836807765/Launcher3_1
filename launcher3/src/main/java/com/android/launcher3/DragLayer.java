@@ -27,6 +27,7 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -723,6 +724,7 @@ public class DragLayer extends InsettableFrameLayout {
     public void animateView(final DragView view, AnimatorUpdateListener updateCb, int duration,
             TimeInterpolator interpolator, final Runnable onCompleteRunnable,
             final int animationEndStyle, View anchorView) {
+        Log.i("Demo", "animateView");
         // Clean up the previous animations
         if (mDropAnim != null) mDropAnim.cancel();
         if (mFadeOutAnim != null) mFadeOutAnim.cancel();
@@ -765,6 +767,7 @@ public class DragLayer extends InsettableFrameLayout {
     }
 
     public void clearAnimatedView() {
+        Log.i("Demo", "ClearAnimatedView");
         if (mDropAnim != null) {
             mDropAnim.cancel();
         }
@@ -780,6 +783,7 @@ public class DragLayer extends InsettableFrameLayout {
     }
 
     private void fadeOutDragView() {
+        Log.i("Demo", "fadeOutDragView");
         mFadeOutAnim = new ValueAnimator();
         mFadeOutAnim.setDuration(150);
         mFadeOutAnim.setFloatValues(0f, 1f);
