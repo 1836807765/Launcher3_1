@@ -2849,6 +2849,7 @@ public class Workspace extends SmoothPagedView
 
     /**
      * {@inheritDoc}
+     * 是否接受本次拖拽的对象
      */
     public boolean acceptDrop(DragObject d) {
         // If it's an external drop (e.g. from All Apps), check if it should be accepted
@@ -2894,6 +2895,7 @@ public class Workspace extends SmoothPagedView
                     mTargetCell);
             float distance = dropTargetLayout.getDistanceFromCell(mDragViewVisualCenter[0],
                     mDragViewVisualCenter[1], mTargetCell);
+
             if (mCreateUserFolderOnDrop && willCreateUserFolder((ItemInfo) d.dragInfo,
                     dropTargetLayout, mTargetCell, distance, true)) {
                 return true;

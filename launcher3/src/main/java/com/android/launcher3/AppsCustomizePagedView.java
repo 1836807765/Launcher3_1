@@ -798,6 +798,7 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
                 }
             }
             if (showOutOfSpaceMessage) {
+                //此处有是弹出屏幕上有没有空间的提示消息
                 mLauncher.showOutOfSpaceMessage(false);
             }
 

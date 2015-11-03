@@ -1931,6 +1931,11 @@ public class Launcher extends Activity
         launcherInfo.hostView = null;
     }
 
+    /**
+     * 弹出“屏幕上没有空间的”提示信息
+     * 弹出“屏幕上没有空间的”提示信息
+     * @param isHotseatLayout
+     */
     void showOutOfSpaceMessage(boolean isHotseatLayout) {
         int strId = (isHotseatLayout ? R.string.hotseat_out_of_space : R.string.out_of_space);
         Toast.makeText(this, getString(strId), Toast.LENGTH_SHORT).show();
