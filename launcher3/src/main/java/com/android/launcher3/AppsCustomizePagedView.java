@@ -360,6 +360,7 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         super.onLayout(changed, l, t, r, b);
 
+        Log.i("Demo", " onLayout() method in AppsCustomizePagedView.java ");
         if (!isDataReady()) {
             if ((LauncherAppState.isDisableAllApps() || !mApps.isEmpty()) && !mWidgets.isEmpty()) {
                 post(new Runnable() {
@@ -1424,7 +1425,7 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
     }
 
     public void setApps(ArrayList<AppInfo> list) {
-
+        Log.i("Demo", " setApps() in AppsCustomizePagedView.java ");
         if (!LauncherAppState.isDisableAllApps()) {
             mApps = list;
             Collections.sort(mApps, LauncherModel.getAppNameComparator());
@@ -1443,6 +1444,7 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
         }
     }
     public void addApps(ArrayList<AppInfo> list) {
+        Log.i("Demo", " addApps() method in AppsCustomizePagedView.java ");
         if (!LauncherAppState.isDisableAllApps()) {
             addAppsWithoutInvalidate(list);
             updatePageCountsAndInvalidateData();
@@ -1481,6 +1483,7 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
         // We remove and re-add the updated applications list because it's properties may have
         // changed (ie. the title), and this will ensure that the items will be in their proper
         // place in the list.
+        Log.i("Demo", " updateApps() in AppsCustomizePagedView.java ");
         if (!LauncherAppState.isDisableAllApps()) {
             removeAppsWithoutInvalidate(list);
             addAppsWithoutInvalidate(list);

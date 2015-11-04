@@ -449,6 +449,7 @@ public class DragController {
                     if (vec != null) {
                         dropOnFlingToDeleteTarget(dragLayerX, dragLayerY, vec);
                     } else {
+                        Log.i("Demo", " onInterceptTouchEvent in DragController ");
                         drop(dragLayerX, dragLayerY);
                     }
                 }
@@ -603,6 +604,7 @@ public class DragController {
                 if (vec != null) {
                     dropOnFlingToDeleteTarget(dragLayerX, dragLayerY, vec);
                 } else {
+                    Log.i("Demo", " MotionEvent.ACTION_UP ");
                     drop(dragLayerX, dragLayerY);
                 }
             }
@@ -671,6 +673,11 @@ public class DragController {
                 accepted);
     }
 
+    /**
+     * drop in DragController
+     * @param x
+     * @param y
+     */
     private void drop(float x, float y) {
         final int[] coordinates = mCoordinatesTemp;
         final DropTarget dropTarget = findDropTarget((int) x, (int) y, coordinates);
@@ -682,6 +689,7 @@ public class DragController {
             mDragObject.dragComplete = true;
             dropTarget.onDragExit(mDragObject);
             if (dropTarget.acceptDrop(mDragObject)) {
+                Log.i("Demo", " drop in DragController ");
                 dropTarget.onDrop(mDragObject);
                 accepted = true;
             }

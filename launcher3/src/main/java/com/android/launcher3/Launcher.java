@@ -3410,6 +3410,7 @@ public class Launcher extends Activity
 
         Animator workspaceAnim =
                 mWorkspace.getChangeStateAnimation(workspaceState, animated, layerViews);
+        Log.i("Demo", " showAppsCustomizeHelper in Launcher ");
         if (!LauncherAppState.isDisableAllApps()
                 || contentType == AppsCustomizePagedView.ContentType.Widgets) {
             // Set the content type for the all apps/widgets space
@@ -4288,6 +4289,7 @@ public class Launcher extends Activity
         // Remove the extra empty screen
         mWorkspace.removeExtraEmptyScreen(false, false);
 
+        Log.i("Demo", " bindAppsAdded ");
         if (!LauncherAppState.isDisableAllApps() &&
                 addedApps != null && mAppsCustomizeContent != null) {
             mAppsCustomizeContent.addApps(addedApps);
@@ -4667,6 +4669,7 @@ public class Launcher extends Activity
      * Implementation of the method from LauncherModel.Callbacks.
      */
     public void bindAllApplications(final ArrayList<AppInfo> apps) {
+        Log.i("Demo", " bindAllApplications in Launcher ");
         if (LauncherAppState.isDisableAllApps()) {
             if (mIntentsOnWorkspaceFromUpgradePath != null) {
                 if (LauncherModel.UPGRADE_USE_MORE_APPS_FOLDER) {
@@ -4706,6 +4709,7 @@ public class Launcher extends Activity
             return;
         }
 
+        Log.i("Demo" , " bindAppsUpdated in Launcher ");
         if (!LauncherAppState.isDisableAllApps() &&
                 mAppsCustomizeContent != null) {
             mAppsCustomizeContent.updateApps(apps);
@@ -4820,6 +4824,8 @@ public class Launcher extends Activity
         } else {
             mWorkspace.disableShortcutsByPackageName(packageNames, user, reason);
         }
+
+        Log.i("Demo", " bindComponentsRemoved in Launcher ");
 
         // Update AllApps
         if (!LauncherAppState.isDisableAllApps() &&

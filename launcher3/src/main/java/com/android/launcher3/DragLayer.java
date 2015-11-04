@@ -531,6 +531,7 @@ public class DragLayer extends InsettableFrameLayout {
     }
 
     public void animateViewIntoPosition(DragView dragView, final View child) {
+        Log.i("Demo", " animateViewIntoPosition 2 pararms ");
         animateViewIntoPosition(dragView, child, null, null);
     }
 
@@ -542,17 +543,20 @@ public class DragLayer extends InsettableFrameLayout {
         final int fromX = r.left;
         final int fromY = r.top;
 
+        Log.i("Demo", " animateViewIntoPosition 8 params ");
         animateViewIntoPosition(dragView, fromX, fromY, pos[0], pos[1], alpha, 1, 1, scaleX, scaleY,
                 onFinishRunnable, animationEndStyle, duration, null);
     }
 
     public void animateViewIntoPosition(DragView dragView, final View child,
             final Runnable onFinishAnimationRunnable, View anchorView) {
+        Log.i("Demo", " animateViewIntoPosition 4 params ");
         animateViewIntoPosition(dragView, child, -1, onFinishAnimationRunnable, anchorView);
     }
 
     public void animateViewIntoPosition(DragView dragView, final View child, int duration,
             final Runnable onFinishAnimationRunnable, View anchorView) {
+        Log.i("Demo", " animateViewIntoPosition 5 params ");
         ShortcutAndWidgetContainer parentChildren = (ShortcutAndWidgetContainer) child.getParent();
         CellLayout.LayoutParams lp =  (CellLayout.LayoutParams) child.getLayoutParams();
         parentChildren.measureChild(child);
@@ -622,6 +626,7 @@ public class DragLayer extends InsettableFrameLayout {
             final int toX, final int toY, float finalAlpha, float initScaleX, float initScaleY,
             float finalScaleX, float finalScaleY, Runnable onCompleteRunnable,
             int animationEndStyle, int duration, View anchorView) {
+        Log.i("Demo", " animateViewIntoPosition 14 params ... ");
         Rect from = new Rect(fromX, fromY, fromX +
                 view.getMeasuredWidth(), fromY + view.getMeasuredHeight());
         Rect to = new Rect(toX, toY, toX + view.getMeasuredWidth(), toY + view.getMeasuredHeight());
@@ -656,6 +661,7 @@ public class DragLayer extends InsettableFrameLayout {
             final Interpolator motionInterpolator, final Interpolator alphaInterpolator,
             final Runnable onCompleteRunnable, final int animationEndStyle, View anchorView) {
 
+        Log.i("Demo", " animateView 14 params ");
         // Calculate the duration of the animation based on the object's distance
         final float dist = (float) Math.sqrt(Math.pow(to.left - from.left, 2) +
                 Math.pow(to.top - from.top, 2));
@@ -753,6 +759,8 @@ public class DragLayer extends InsettableFrameLayout {
                 }
                 switch (animationEndStyle) {
                 case ANIMATION_END_DISAPPEAR:
+                    //animation_end_disappear
+                    Log.i("Demo", " animation_end_disappear ");
                     clearAnimatedView();
                     break;
                 case ANIMATION_END_FADE_OUT:
