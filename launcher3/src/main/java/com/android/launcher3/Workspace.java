@@ -64,6 +64,7 @@ import android.view.accessibility.AccessibilityManager;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.launcher3.FolderIcon.FolderRingAnimator;
 import com.android.launcher3.Launcher.CustomContentCallbacks;
@@ -429,12 +430,20 @@ public class Workspace extends SmoothPagedView
         mDeferRemoveExtraEmptyScreen = true;
     }
 
+
+    /**
+     * onDragEnd
+     * this method will be called after the DragController's onInterceptTouchEvent
+     * and the MotionEvent.ACTION_UP;
+     */
     public void onDragEnd() {
         if (!mDeferRemoveExtraEmptyScreen) {
+            //TODO neet to see.
             removeExtraEmptyScreen(true, mDragSourceInternal != null);
         }
 
         mIsDragOccuring = false;
+
         updateChildrenLayersEnabled(false);
         mLauncher.unlockScreenOrientation(false);
 
@@ -444,6 +453,7 @@ public class Workspace extends SmoothPagedView
 
         mDragSourceInternal = null;
         mLauncher.onInteractionEnd();
+        Log.i("Demo", " the mlauncher's mode is : " + mLauncher.getWorkspace().isInOverviewMode());
     }
 
     /**
@@ -1899,15 +1909,25 @@ public class Workspace extends SmoothPagedView
         }
     }
 
+    /**
+     * updateChildrenLayersEnabled
+     * @param force 是否强制
+     */
     private void updateChildrenLayersEnabled(boolean force) {
+//        Log.i("Demo", "the workspace's state is overview ? the result is : " + (mState == State.OVERVIEW));
+//        Log.i("Demo", " the state isSwitchingState : " + mIsSwitchingState);
         boolean small = mState == State.OVERVIEW || mIsSwitchingState;
+
+        //false                        //false
         boolean enableChildrenLayers = force || small || mAnimatingViewIntoPlace || isPageMoving();
 
         if (enableChildrenLayers != mChildrenLayersEnabled) {
             mChildrenLayersEnabled = enableChildrenLayers;
             if (mChildrenLayersEnabled) {
+                Log.i("Demo", " mChildrenLayersEnabled value is true ");
                 enableHwLayersOnVisiblePages();
             } else {
+                Log.i("Demo", "pageCount is : " + getPageCount());
                 for (int i = 0; i < getPageCount(); i++) {
                     final CellLayout cl = (CellLayout) getChildAt(i);
                     cl.enableHardwareLayer(false);
@@ -3052,6 +3072,7 @@ public class Workspace extends SmoothPagedView
         if (dropOverView instanceof FolderIcon) {
             FolderIcon fi = (FolderIcon) dropOverView;
             if (fi.acceptDrop(d.dragInfo)) {
+                Log.i("Demo", " addToExistingFolderIfNecessary ");
                 fi.onDrop(d);
 
                 // if the drag started here, we need to remove it from the workspace
@@ -3084,6 +3105,7 @@ public class Workspace extends SmoothPagedView
         if (d.dragSource != this) {
             final int[] touchXY = new int[] { (int) mDragViewVisualCenter[0],
                     (int) mDragViewVisualCenter[1] };
+            Log.i("Demo", " onDrop in workspace ");
             onDropExternal(touchXY, d.dragInfo, dropTargetLayout, false, d);
         } else if (mDragInfo != null) {
             final View cell = mDragInfo.cell;
@@ -3235,10 +3257,12 @@ public class Workspace extends SmoothPagedView
                 if (info.itemType == LauncherSettings.Favorites.ITEM_TYPE_APPWIDGET) {
                     int animationType = resizeOnDrop ? ANIMATE_INTO_POSITION_AND_RESIZE :
                             ANIMATE_INTO_POSITION_AND_DISAPPEAR;
+                    Log.i("Demo", " onDrop ... ");
                     animateWidgetDrop(info, parent, d.dragView,
                             onCompleteRunnable, animationType, cell, false);
                 } else {
                     int duration = snapScreen < 0 ? -1 : ADJACENT_SCREEN_DROP_DURATION;
+                    Log.i("Demo", " onDrop in Workspace.java ");
                     mLauncher.getDragLayer().animateViewIntoPosition(d.dragView, cell, duration,
                             onCompleteRunnable, this);
                 }
@@ -3868,6 +3892,7 @@ public class Workspace extends SmoothPagedView
 
     private void onDropExternal(int[] touchXY, Object dragInfo,
             CellLayout cellLayout, boolean insertAtFirst) {
+        Log.i("Demo", " onDropExternal 4 params ");
         onDropExternal(touchXY, dragInfo, cellLayout, insertAtFirst, null);
     }
 
@@ -3907,6 +3932,7 @@ public class Workspace extends SmoothPagedView
             snapToScreenId(screenId, null);
         }
 
+        //add the system widget to workspace
         if (info instanceof PendingAddItemInfo) {
             final PendingAddItemInfo pendingInfo = (PendingAddItemInfo) dragInfo;
 
@@ -3986,6 +4012,7 @@ public class Workspace extends SmoothPagedView
                     ((PendingAddWidgetInfo) pendingInfo).info.configure != null) {
                 animationStyle = ANIMATE_INTO_POSITION_AND_REMAIN;
             }
+            Log.i("Demo", " onDropExternal... ");
             animateWidgetDrop(info, cellLayout, d.dragView, onAnimationCompleteRunnable,
                     animationStyle, finalView, true);
         } else {
@@ -4165,6 +4192,7 @@ public class Workspace extends SmoothPagedView
                     }
                 }
             };
+            Log.i("Demo", " animateWidgetDrop ");
             dragLayer.animateViewIntoPosition(dragView, from.left, from.top, finalPos[0],
                     finalPos[1], 1, 1, 1, scaleXY[0], scaleXY[1], onComplete, endStyle,
                     duration, this);
@@ -4232,6 +4260,7 @@ public class Workspace extends SmoothPagedView
      */
     public void onDropCompleted(final View target, final DragObject d,
             final boolean isFlingToDelete, final boolean success) {
+
         if (mDeferDropAfterUninstall) {
             mDeferredAction = new Runnable() {
                 public void run() {

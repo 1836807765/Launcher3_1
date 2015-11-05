@@ -360,6 +360,7 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         super.onLayout(changed, l, t, r, b);
 
+        Log.i("Demo", " onLayout() method in AppsCustomizePagedView.java ");
         if (!isDataReady()) {
             if ((LauncherAppState.isDisableAllApps() || !mApps.isEmpty()) && !mWidgets.isEmpty()) {
                 post(new Runnable() {
@@ -719,7 +720,8 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
      *
      * @param target where the item was dragged to (can be null if the item was flung)
      * 传入的参数：target ， false，success
-     */
+     *
+     **/
     private void endDragging(View target, boolean isFlingToDelete, boolean success) {
         if (isFlingToDelete || !success || (target != mLauncher.getWorkspace() &&
                 !(target instanceof DeleteDropTarget) && !(target instanceof Folder))) {
@@ -732,7 +734,10 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
             mLauncher.unlockScreenOrientation(false);
         }
         //拖拽结束 退出浏览模式
-        mLauncher.getWorkspace().exitOverviewMode(true);
+        Toast.makeText(getContext(), mLauncher.getWorkspace().isInOverviewMode()+"", Toast.LENGTH_SHORT).show();
+        if(mLauncher.getWorkspace().isInOverviewMode()){
+            mLauncher.getWorkspace().exitOverviewMode(true);
+        }
     }
 
     @Override
@@ -1421,6 +1426,7 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
     }
 
     public void setApps(ArrayList<AppInfo> list) {
+        Log.i("Demo", " setApps() in AppsCustomizePagedView.java ");
         if (!LauncherAppState.isDisableAllApps()) {
             mApps = list;
             Collections.sort(mApps, LauncherModel.getAppNameComparator());
@@ -1439,6 +1445,7 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
         }
     }
     public void addApps(ArrayList<AppInfo> list) {
+        Log.i("Demo", " addApps() method in AppsCustomizePagedView.java ");
         if (!LauncherAppState.isDisableAllApps()) {
             addAppsWithoutInvalidate(list);
             updatePageCountsAndInvalidateData();
@@ -1477,6 +1484,7 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
         // We remove and re-add the updated applications list because it's properties may have
         // changed (ie. the title), and this will ensure that the items will be in their proper
         // place in the list.
+        Log.i("Demo", " updateApps() in AppsCustomizePagedView.java ");
         if (!LauncherAppState.isDisableAllApps()) {
             removeAppsWithoutInvalidate(list);
             addAppsWithoutInvalidate(list);

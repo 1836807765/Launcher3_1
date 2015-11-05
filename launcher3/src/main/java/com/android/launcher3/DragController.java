@@ -375,7 +375,7 @@ public class DragController {
      */
     void onDeferredEndDrag(DragView dragView) {
         dragView.remove();
-
+        Log.i("Demo", "onDeferredEndDrag");
         if (mDragObject.deferDragViewCleanupPostAnimation) {
             // If we skipped calling onDragEnd() before, do it now
             for (DragListener listener : mListeners) {
@@ -439,6 +439,7 @@ public class DragController {
                 mLastDropTarget = null;
                 break;
             case MotionEvent.ACTION_UP:
+                Log.i("Demo", "Action up");
                 mLastTouchUpTime = System.currentTimeMillis();
                 if (mDragging) {
                     PointF vec = isFlingingToDelete(mDragObject.dragSource);
@@ -448,6 +449,7 @@ public class DragController {
                     if (vec != null) {
                         dropOnFlingToDeleteTarget(dragLayerX, dragLayerY, vec);
                     } else {
+                        Log.i("Demo", " onInterceptTouchEvent in DragController ");
                         drop(dragLayerX, dragLayerY);
                     }
                 }
@@ -602,6 +604,7 @@ public class DragController {
                 if (vec != null) {
                     dropOnFlingToDeleteTarget(dragLayerX, dragLayerY, vec);
                 } else {
+                    Log.i("Demo", " MotionEvent.ACTION_UP ");
                     drop(dragLayerX, dragLayerY);
                 }
             }
@@ -670,6 +673,11 @@ public class DragController {
                 accepted);
     }
 
+    /**
+     * drop in DragController
+     * @param x
+     * @param y
+     */
     private void drop(float x, float y) {
         final int[] coordinates = mCoordinatesTemp;
         final DropTarget dropTarget = findDropTarget((int) x, (int) y, coordinates);
@@ -681,6 +689,7 @@ public class DragController {
             mDragObject.dragComplete = true;
             dropTarget.onDragExit(mDragObject);
             if (dropTarget.acceptDrop(mDragObject)) {
+                Log.i("Demo", " drop in DragController ");
                 dropTarget.onDrop(mDragObject);
                 accepted = true;
             }
