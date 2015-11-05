@@ -192,7 +192,7 @@ public class DeleteDropTarget extends ButtonDropTarget {
 
         if(!tmp && info instanceof ShortcutInfo){
             ShortcutInfo itemInfo = (ShortcutInfo)info;
-            // If jdge is true, info is system app.
+            // If judge is true, info is system app.
             if((itemInfo.flags & 1) != 1){
                 useUninstallLabel = false;
             }

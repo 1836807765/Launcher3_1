@@ -175,6 +175,7 @@ public class InstallShortcutReceiver extends BroadcastReceiver {
         mUseInstallQueue = false;
         flushInstallQueue(context);
     }
+
     static void flushInstallQueue(Context context) {
         String spKey = LauncherAppState.getSharedPreferencesKey();
         SharedPreferences sp = context.getSharedPreferences(spKey, Context.MODE_PRIVATE);
@@ -186,7 +187,8 @@ public class InstallShortcutReceiver extends BroadcastReceiver {
                 final PendingInstallShortcutInfo pendingInfo = iter.next();
                 final Intent intent = pendingInfo.launchIntent;
 
-                if (LauncherAppState.isDisableAllApps() && !isValidShortcutLaunchIntent(intent)) {
+                //11月4日修改
+                if (!LauncherAppState.isDisableAllApps() && !isValidShortcutLaunchIntent(intent)) {
                     if (DBG) Log.d(TAG, "Ignoring shortcut with launchIntent:" + intent);
                     continue;
                 }
