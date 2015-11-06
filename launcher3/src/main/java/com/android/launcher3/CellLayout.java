@@ -600,9 +600,10 @@ public class CellLayout extends ViewGroup {
         final LayoutParams lp = params;
 
         // Hotseat icons - remove text
+        //HotSeat底部图标的标题显示控制
         if (child instanceof BubbleTextView) {
             BubbleTextView bubbleChild = (BubbleTextView) child;
-            bubbleChild.setTextVisibility(!mIsHotseat);
+            bubbleChild.setTextVisibility(mIsHotseat);
         }
 
         //设置 图标的 缩放比例 如果使hotseat，需要进行缩放计算
