@@ -197,6 +197,9 @@ public class DeleteDropTarget extends ButtonDropTarget {
                 useUninstallLabel = false;
             }
         }
+
+
+
         //卸载标签
 //        boolean useUninstallLabel = !LauncherAppState.isDisableAllApps() &&
 //                isAllAppsApplication(source, info);

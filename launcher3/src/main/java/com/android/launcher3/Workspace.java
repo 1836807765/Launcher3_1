@@ -407,6 +407,7 @@ public class Workspace extends SmoothPagedView
 
     public void onDragStart(final DragSource source, Object info, int dragAction) {
         mIsDragOccuring = true;
+
         updateChildrenLayersEnabled(false);
         mLauncher.lockScreenOrientation();
         mLauncher.onInteractionBegin();
@@ -4477,10 +4478,12 @@ public class Workspace extends SmoothPagedView
         return true;
     }
 
+    boolean isSupportsAppInfoDropTarget = true;
     @Override
     public boolean supportsAppInfoDropTarget() {
 //        return false;
-        return true;
+//        return true;
+        return isSupportsAppInfoDropTarget;
     }
 
     @Override
