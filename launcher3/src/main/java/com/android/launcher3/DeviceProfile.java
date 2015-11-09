@@ -617,6 +617,7 @@ public class DeviceProfile {
                         availableWidth / 2, paddingBottom + availableHeight / 2);
             } else {
                 // Pad the top and bottom of the workspace with search/hotseat bar sizes
+
                 padding.set(desiredWorkspaceLeftRightMarginPx - defaultWidgetPadding.left,
                         searchBarBounds.bottom,
                         desiredWorkspaceLeftRightMarginPx - defaultWidgetPadding.right,
