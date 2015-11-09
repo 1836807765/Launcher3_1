@@ -432,6 +432,8 @@ public class Launcher extends Activity
         mSharedPrefs = getSharedPreferences(LauncherAppState.getSharedPreferencesKey(),
                 Context.MODE_PRIVATE);
         mIsSafeModeEnabled = getPackageManager().isSafeMode();
+
+        //1. the first step : create the manager object
         mModel = app.setLauncher(this);
         mIconCache = app.getIconCache();
         mIconCache.flushInvalidIcons(grid);//清除掉部分尺寸不合适的图标
@@ -455,9 +457,11 @@ public class Launcher extends Activity
                     Environment.getExternalStorageDirectory() + "/launcher");
         }
 
+        //2.the second step; get the status flags
         checkForLocaleChange();
         setContentView(R.layout.launcher);
 
+        //3.the third step; setupViews();
         setupViews();
         grid.layout(this);
 
@@ -473,6 +477,7 @@ public class Launcher extends Activity
             android.os.Debug.stopMethodTracing();
         }
 
+        Log.i("Demo", " Launcher's onCreate method ");
         //加载应用图标
         if (!mRestoring) {
             //disable_synchronous_binding_current_page
@@ -1934,6 +1939,11 @@ public class Launcher extends Activity
         launcherInfo.hostView = null;
     }
 
+    /**
+     * 弹出“屏幕上没有空间的”提示信息
+     * 弹出“屏幕上没有空间的”提示信息
+     * @param isHotseatLayout
+     */
     void showOutOfSpaceMessage(boolean isHotseatLayout) {
         int strId = (isHotseatLayout ? R.string.hotseat_out_of_space : R.string.out_of_space);
         Toast.makeText(this, getString(strId), Toast.LENGTH_SHORT).show();
@@ -4665,6 +4675,7 @@ public class Launcher extends Activity
     }
 
     /**
+     * 添加所有的应用图标
      * Add the icons for all apps.
      *
      * Implementation of the method from LauncherModel.Callbacks.
@@ -4680,6 +4691,8 @@ public class Launcher extends Activity
                 mIntentsOnWorkspaceFromUpgradePath = null;
             }
             if (mAppsCustomizeContent != null) {
+                //cumtomize add the line
+//                mAppsCustomizeContent.setApps(apps);
                 mAppsCustomizeContent.onPackagesUpdated(
                         LauncherModel.getSortedWidgetsAndShortcuts(this));
             }

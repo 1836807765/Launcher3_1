@@ -486,6 +486,7 @@ public class AutoInstallsLayout {
             } catch (RuntimeException ex) {
                 if (LOGD) Log.e(TAG, "Problem allocating appWidgetId", ex);
             }
+
             return insertedId;
         }
     }
