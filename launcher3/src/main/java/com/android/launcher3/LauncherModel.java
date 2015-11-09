@@ -1363,6 +1363,7 @@ public class LauncherModel extends BroadcastReceiver
         startLoader(isLaunching, synchronousBindPage, LOADER_FLAG_NONE);
     }
 
+    //该方法用于装载桌面的UI视图
     public void startLoader(boolean isLaunching, int synchronousBindPage, int loadFlags) {
         synchronized (mLock) {
             if (DEBUG_LOADERS) {
@@ -1465,7 +1466,7 @@ public class LauncherModel extends BroadcastReceiver
     }
 
     /**
-     *
+     * 任务装载器
      * Runnable for the thread that loads the contents of the launcher:
      *   - workspace icons
      *   - widgets
@@ -1506,7 +1507,9 @@ public class LauncherModel extends BroadcastReceiver
             }
 
             boolean isUpgradePath = false;
+            //workspace是否已被装载 未被装载
             if (!mWorkspaceLoaded) {
+                //装载workspace
                 isUpgradePath = loadWorkspace();
                 synchronized (LoaderTask.this) {
                     if (mStopped) {
@@ -1516,7 +1519,7 @@ public class LauncherModel extends BroadcastReceiver
                 }
             }
 
-            // Bind the workspace
+            // Bind the workspace 绑定workspace
             bindWorkspace(-1, isUpgradePath);
             return isUpgradePath;
         }
@@ -1627,6 +1630,7 @@ public class LauncherModel extends BroadcastReceiver
                             ? Process.THREAD_PRIORITY_DEFAULT : Process.THREAD_PRIORITY_BACKGROUND);
                 }
                 if (DEBUG_LOADERS) Log.d(TAG, "step 1: loading workspace");
+                //装载并绑定workspace
                 isUpgrade = loadAndBindWorkspace();
 
                 if (mStopped) {
@@ -1645,6 +1649,7 @@ public class LauncherModel extends BroadcastReceiver
 
                 // second step
                 if (DEBUG_LOADERS) Log.d(TAG, "step 2: loading all apps");
+                //批量装载所有的Android应用
                 loadAndBindAllApps();
 
                 // Restore the default thread priority after we are done loading items
@@ -1845,6 +1850,7 @@ public class LauncherModel extends BroadcastReceiver
         }
 
         /** Returns whether this is an upgrade path */
+        //装载workspace的方法
         private boolean loadWorkspace() {
             // Log to disk
             Launcher.addDumpLog(TAG, "11683562 - loadWorkspace()", true);
@@ -1955,9 +1961,12 @@ public class LauncherModel extends BroadcastReceiver
                             boolean restored = 0 != c.getInt(restoredIndex);
                             boolean allowMissingTarget = false;
 
+                            Log.i("DemoDemo", itemType + "");
                             switch (itemType) {
                             case LauncherSettings.Favorites.ITEM_TYPE_APPLICATION:
+                                //系统应用
                             case LauncherSettings.Favorites.ITEM_TYPE_SHORTCUT:
+                                //快捷方式
                                 id = c.getLong(idIndex);
                                 intentDescription = c.getString(intentIndex);
                                 long serialNumber = c.getInt(profileIdIndex);
@@ -2090,9 +2099,11 @@ public class LauncherModel extends BroadcastReceiver
                                     }
                                 } else if (itemType ==
                                         LauncherSettings.Favorites.ITEM_TYPE_APPLICATION) {
+                                    Log.i("Davie", itemType + "");
                                     info = getShortcutInfo(manager, intent, user, context, c,
                                             iconIndex, titleIndex, mLabelCache, allowMissingTarget);
                                 } else {
+                                    Log.i("Davie", itemType + "");
                                     info = getShortcutInfo(c, context, iconTypeIndex,
                                             iconPackageIndex, iconResourceIndex, iconIndex,
                                             titleIndex);
@@ -2774,6 +2785,9 @@ public class LauncherModel extends BroadcastReceiver
             if (DEBUG_LOADERS) {
                 Log.d(TAG, "loadAndBindAllApps mAllAppsLoaded=" + mAllAppsLoaded);
             }
+
+            Log.i("DemoDe", mAllAppsLoaded + "");
+            //所有的Apps是否已经被加载, mAllAppsLoaded 此时为false
             if (!mAllAppsLoaded) {
                 loadAllApps();
                 synchronized (LoaderTask.this) {
@@ -2820,6 +2834,7 @@ public class LauncherModel extends BroadcastReceiver
             }
         }
 
+        //加载所有的应用 loadAllApps()
         private void loadAllApps() {
             final long loadTime = DEBUG_LOADERS ? SystemClock.uptimeMillis() : 0;
 
