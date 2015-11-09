@@ -3237,6 +3237,7 @@ public class Launcher extends Activity
             ItemInfo info = (ItemInfo) v.getTag();
             longClickCellInfo = new CellLayout.CellInfo(v, info);;
             itemUnderLongClick = longClickCellInfo.cell;
+            Log.i("Demo", " v.getTag() instanceof ItemInfo ");
             resetAddInfo();
         }
 

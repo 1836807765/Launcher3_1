@@ -387,7 +387,8 @@ public class DeviceProfile {
         // Hotseat
         hotseatBarHeightPx = iconSizePx + 4 * edgeMarginPx;
         hotseatCellWidthPx = iconSizePx;
-        hotseatCellHeightPx = iconSizePx;
+        //revise the hotseatCellHeightPx from iconSizePx to iconSizePx*1.5
+        hotseatCellHeightPx = (int)(iconSizePx*1.5);
 
         // Folder
         folderCellWidthPx = cellWidthPx + 3 * edgeMarginPx;

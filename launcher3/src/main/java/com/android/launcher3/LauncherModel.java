@@ -397,6 +397,7 @@ public class LauncherModel extends BroadcastReceiver
         runOnWorkerThread(r);
     }
 
+    //将Apps添加并绑定到workspace中去
     public void addAndBindAddedWorkspaceApps(final Context context,
             final ArrayList<ItemInfo> workspaceApps) {
         final Callbacks callbacks = getCallback();
@@ -442,6 +443,7 @@ public class LauncherModel extends BroadcastReceiver
                         Pair<Long, int[]> coords = LauncherModel.findNextAvailableIconSpace(context,
                                 name, launchIntent, startSearchPageIndex, workspaceScreens);
                         if (coords == null) {
+                            //Launcher的内容提供者
                             LauncherProvider lp = LauncherAppState.getLauncherProvider();
 
                             // If we can't find a valid position, then just add a new screen.
@@ -467,6 +469,7 @@ public class LauncherModel extends BroadcastReceiver
                         }
 
                         ShortcutInfo shortcutInfo;
+                        Log.i("DDemo", a.toString());
                         if (a instanceof ShortcutInfo) {
                             shortcutInfo = (ShortcutInfo) a;
                         } else if (a instanceof AppInfo) {
@@ -873,10 +876,10 @@ public class LauncherModel extends BroadcastReceiver
         String userSerial = Long.toString(UserManagerCompat.getInstance(context)
                 .getSerialNumberForUser(user));
         Cursor c = cr.query(LauncherSettings.Favorites.CONTENT_URI,
-            new String[] { "title", "intent", "profileId" },
-            "title=? and (intent=? or intent=?) and profileId=?",
-            new String[] { title, intentWithPkg.toUri(0), intentWithoutPkg.toUri(0), userSerial },
-            null);
+                new String[]{"title", "intent", "profileId"},
+                "title=? and (intent=? or intent=?) and profileId=?",
+                new String[]{title, intentWithPkg.toUri(0), intentWithoutPkg.toUri(0), userSerial},
+                null);
         try {
             return c.moveToFirst();
         } finally {
@@ -982,6 +985,7 @@ public class LauncherModel extends BroadcastReceiver
      */
     static void addItemToDatabase(Context context, final ItemInfo item, final long container,
             final long screenId, final int cellX, final int cellY, final boolean notify) {
+
         item.container = container;
         item.cellX = cellX;
         item.cellY = cellY;
@@ -996,6 +1000,7 @@ public class LauncherModel extends BroadcastReceiver
 
         final ContentValues values = new ContentValues();
         final ContentResolver cr = context.getContentResolver();
+
         item.onAddToDatabase(context, values);
 
         item.id = LauncherAppState.getLauncherProvider().generateNewItemId();
@@ -1017,7 +1022,9 @@ public class LauncherModel extends BroadcastReceiver
                             sBgFolders.put(item.id, (FolderInfo) item);
                             // Fall through
                         case LauncherSettings.Favorites.ITEM_TYPE_APPLICATION:
+                            //android系统应用
                         case LauncherSettings.Favorites.ITEM_TYPE_SHORTCUT:
+                            //快捷方式图标
                             if (item.container == LauncherSettings.Favorites.CONTAINER_DESKTOP ||
                                     item.container == LauncherSettings.Favorites.CONTAINER_HOTSEAT) {
                                 sBgWorkspaceItems.add(item);
@@ -1082,7 +1089,7 @@ public class LauncherModel extends BroadcastReceiver
     /**
      * Removes the specified items from the database
      * @param context
-     * @param item
+     * @param items
      */
     static void deleteItemsFromDatabase(Context context, final ArrayList<? extends ItemInfo> items) {
         final ContentResolver cr = context.getContentResolver();
@@ -1963,10 +1970,8 @@ public class LauncherModel extends BroadcastReceiver
 
                             Log.i("DemoDemo", itemType + "");
                             switch (itemType) {
-                            case LauncherSettings.Favorites.ITEM_TYPE_APPLICATION:
-                                //系统应用
-                            case LauncherSettings.Favorites.ITEM_TYPE_SHORTCUT:
-                                //快捷方式
+                            case LauncherSettings.Favorites.ITEM_TYPE_APPLICATION://Android应用
+                            case LauncherSettings.Favorites.ITEM_TYPE_SHORTCUT://shortcut uri链接
                                 id = c.getLong(idIndex);
                                 intentDescription = c.getString(intentIndex);
                                 long serialNumber = c.getInt(profileIdIndex);
@@ -2099,7 +2104,6 @@ public class LauncherModel extends BroadcastReceiver
                                     }
                                 } else if (itemType ==
                                         LauncherSettings.Favorites.ITEM_TYPE_APPLICATION) {
-                                    Log.i("Davie", itemType + "");
                                     info = getShortcutInfo(manager, intent, user, context, c,
                                             iconIndex, titleIndex, mLabelCache, allowMissingTarget);
                                 } else {
@@ -2133,6 +2137,15 @@ public class LauncherModel extends BroadcastReceiver
                                     info.spanY = 1;
                                     info.intent.putExtra(ItemInfo.EXTRA_PROFILE, serialNumber);
                                     info.isDisabled = disabledState;
+                                    //判断是否为系统应用
+//                                    (itemInfo.flags & 1) != 1;
+                                    if(Utilities.isSystemApp(context, intent)){
+                                        info.flags = 2;//系统应用
+                                    }else {
+                                        info.flags = 1;
+                                    }
+
+                                    Log.i("DEmo", info.flags +"");
                                     if (isSafeMode && !Utilities.isSystemApp(context, intent)) {
                                         info.isDisabled |= ShortcutInfo.FLAG_DISABLED_SAFEMODE;
                                     }
@@ -2165,7 +2178,7 @@ public class LauncherModel extends BroadcastReceiver
                                 }
                                 break;
 
-                            case LauncherSettings.Favorites.ITEM_TYPE_FOLDER:
+                            case LauncherSettings.Favorites.ITEM_TYPE_FOLDER://文件夹
                                 id = c.getLong(idIndex);
                                 FolderInfo folderInfo = findOrMakeFolder(sBgFolders, id);
 
